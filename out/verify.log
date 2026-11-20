@@ -1,0 +1,14 @@
+PASS  AC-01 the file is the Kaggle format and nothing else: header=['id', 'n', 'square_id', 'x', 'y', 'angle'] rows=500500 ids 0..500499 consecutive=True  (0.9s)
+PASS  AC-02 every puzzle has exactly n squares, square_id 0..n-1: puzzles=1000 bad=[]  (1.0s)
+PASS  AC-03 coordinates are finite decimal literals: rows=500500 malformed=0  (3.8s)
+PASS  AC-04 no two squares in a puzzle overlap (SAT, all pairs): puzzles=1000 worst gap=-7.097e-13 at n=5  (163.6s)
+PASS  AC-05 L is recomputed from the CSV, not trusted: max |L_csv - L_results| = 5.02e-13  (2.9s)
+PASS  AC-06 the total score is the sum of the per-puzzle scores: recomputed 28.897421 vs results 28.897421  (3.0s)
+PASS  AC-07 the grid baseline is what the metric says it is: grid total 28.937669917 expected 28.937669917  (0.0s)
+PASS  AC-08 no puzzle is worse than the grid: worse_than_grid=0 better_than_grid=1  (0.0s)
+PASS  AC-09 the shipped packings reproduce every reported side: max deviation 0.00e+00 over 1000 puzzles  (1.7s)
+PASS  AC-10 every number quoted in REPORT.md exists in results.json: checked 3 claims, missing=[]  (0.0s)
+PASS  AC-11 the site is one self-contained file: external_refs=0 bytes=54452  (0.0s)
+PASS  AC-12 the README commands name files that exist: 5 commands, missing=[]  (0.0s)
+
+12/12 checks passed in 176.7s

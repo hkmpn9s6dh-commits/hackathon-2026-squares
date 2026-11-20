@@ -52,11 +52,11 @@
  {
   "name": "AC-11 the site is one self-contained file",
   "ok": true,
-  "detail": "external_refs=0 bytes=75376"
+  "detail": "external_refs=0 bytes=54452"
  },
  {
   "name": "AC-12 the README commands name files that exist",
   "ok": true,
-  "detail": "6 commands, missing=[]"
+  "detail": "5 commands, missing=[]"
  }
 ]

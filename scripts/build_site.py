@@ -61,6 +61,21 @@ def main() -> int:
         ("本作品", total, f"{total:.4f}", "us"),
         ("方阵基线", grid_total, f"{grid_total:.4f}", "base"),
     ]
+    zlo, zhi = 28.85, 28.95
+
+    def zpct(v):
+        return max(1.0, min(100.0, (v - zlo) / (zhi - zlo) * 100))
+
+    zoom_bars = [
+        ("方阵基线", grid_total, f"{grid_total:.4f}"),
+        ("本作品", total, f"{total:.4f}"),
+    ]
+    zoom_html = "".join(
+        f'<div class="bar"><span class="bl">{html.escape(name)}</span>'
+        f'<span class="btrack"><span class="bfill {"us" if name=="本作品" else "base"}" '
+        f'style="width:{zpct(v):.2f}%"></span></span><span class="bv">{val}</span></div>'
+        for name, v, val in zoom_bars
+    )
     bar_html = "".join(
         f'<div class="bar"><span class="bl">{html.escape(name)}</span>'
         f'<span class="btrack"><span class="bfill {kind}" style="width:{max(1.5, pct(v)):.2f}%"></span></span>'
@@ -87,7 +102,7 @@ def main() -> int:
         band_svg.append(f'<rect class="bo" x="{x+step*0.62:.2f}" y="{150-ho:.2f}" width="{step*0.34:.2f}" height="{ho:.2f}"><title>k={k} 本作品 {osum:.3f}</title></rect>')
         if k % 5 == 0:
             band_svg.append(f'<text class="tick" x="{x+step*0.45:.2f}" y="166">{k}</text>')
-    band_svg.append(f'<text class="lbl" x="40" y="182">k = floor(√n)：第 k 段是 n ∈ (k², (k+1)²]，每段方阵损失约 0.9</text>')
+    band_svg.append(f'<text class="lbl" x="40" y="182">闭式分解（不是测量）：k = floor(√n)，每段方阵损失 (k+1)/√n−1 合计约 0.9</text>')
     band_svg.append("</svg>")
 
     # --- gallery --------------------------------------------------------------
@@ -180,15 +195,20 @@ def main() -> int:
   <section>
     <h2>01 · 分数</h2>
     <div class="bars">{bar_html}</div>
-    <p class="note">长度按同一刻度画；榜首是 2026-11-20 的公开快照。方阵基线 {grid_total:.4f} 是把
-    1000 题全按 <code>ceil(√n)</code> 提交的分数 —— 也是「不交」的分数。本作品只比它低
-    {(grid_total-total)/grid_total*100:.2f}%。</p>
+    <p class="note">全长刻度 21–29.5：本作品与方阵在这张图上几乎重合 —— 这是一份弱结果，
+    不打算用刻度把它画得好看。</p>
+    <h3>同一把尺，放大 100 倍看差距</h3>
+    <div class="bars">{zoom_html}</div>
+    <p class="note">刻度 28.85–28.95。本作品比方阵低 <b>{grid_total-total:.4f}</b> 分
+    （{100*(grid_total-total)/grid_total:.2f}%），全部来自 n=5 一题。方阵基线是把 1000 题全按
+    <code>ceil(√n)</code> 提交的分数 —— 也是「不交」的分数；榜首 22.04 是 2026-11-20 的公开快照。</p>
   </section>
 
   <section>
     <h2>02 · 每段的那条缝</h2>
     <p>分数不是均匀散在 1000 题上的：令 k = floor(√n)，第 k 段的方阵损失合計约 0.9，31 段加起来
-    就是 28.94。灰柱是方阵，红柱是本作品 —— 只有红柱明显短的地方，才是真的压下去了。</p>
+    就是 28.94。灰柱是方阵，红柱是本作品。这张图是公式算出来的分解，用来看「分数欠在哪些段」；
+红柱比灰柱短的部分才是真的收回（只有 k=2 段有一点点）。</p>
     {''.join(band_svg)}
   </section>
 
@@ -224,12 +244,14 @@ def main() -> int:
 
   <section>
     <h2>05 · 为什么只压下去 {res['improved_count']} 题</h2>
-    <p>因为<strong>一个方块的包围盒高度永远 ≥ 1</strong>：k 行满排之上再加一排，高度不可能低于 k+1。
-    要更低，上一排必须留缝、让新方块斜插进去 —— 而「留缝」是整排的协同动作，不是局部排斥能产生的。</p>
-    <p>实测（n = 10，随机起点 + 800 次松弛 + 精确投影，各 6 次）：盒子边长 3.90 时 6 次里有
-    <b>1</b> 次落到合法构型；3.80 时 <b>0</b> 次。方阵是 4.00。也就是说，能走到的邻居里几乎没有
-    更好的解 —— 文献里那些更小的构型是<b>刚体构造</b>（L 形角件 + 斜插方块），不是从方阵连续走得到的。</p>
-    <p class="note">这条边界是本报告的主要结论，不是调参空间。见 REPORT.md 第三节。</p>
+    <p>一个方块的包围盒高度永远 ≥ 1：k 行满排之上再加一排，高度不可能低于 k+1。要更低，
+    上一排必须留缝让新方块斜插 —— 而留缝会把宽度撑开，宽度就是 L，两头互锁。</p>
+    <p><strong>但最硬的反例是 n=5 自己</strong>：这一题的公开最优是 2+1/√2 ≈ 2.7071（2×2 方阵 +
+    一个 45° 斜放），而我们采样的角度集合 {{0, ±45°}} 本来就包含这个构造。24 次重启只到 2.910，
+    差 7.5%。<strong>这不是构型空间的问题，是采样器的问题。</strong></p>
+    <p>所以这里只能说到：本实现靠随机重启在小 n 上碰运气，没做到榜首那种量级（22.04）。
+    也说清一个取舍：赛规允许公开外部构型，本作品选择不拷贝，代价约 0.34 分 —— 见 REPORT.md「三之二」。</p>
+    <p class="note">这条边界是这两个实现的边界，不是问题的边界。榜首的存在就是反例。</p>
   </section>
 
   <section>
