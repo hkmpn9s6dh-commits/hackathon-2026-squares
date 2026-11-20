@@ -25,7 +25,6 @@
 ## 复现
 
 ```bash
-py -3 scripts/parse_record.py   # 解析公开记录表（只取边长，做尺子用）
 py -3 scripts/solve.py          # 全量求解 -> out/packings.npz, out/results.json, out/submission.csv
 py -3 scripts/audit.py          # 最坏穿透 -> out/audit.json
 py -3 scripts/build_report.py   # REPORT.md（数字从 results.json 注入）
@@ -47,7 +46,7 @@ squares/
 │   ├── geometry.py         顶点 / 分离轴 / 包围盒 L / 方阵基线
 │   ├── relax.py            软排斥 + 硬投影墙 + 45° 非局部动作
 │   └── grow.py             逐题加一的链式构造（本版未启用，留作对照）
-├── scripts/                parse_record · solve · audit · build_report · build_site
+├── scripts/                solve · audit · build_report · build_site
 ├── harness/verify.py       闸 B：12 条断言
 ├── site/index.html         闸 C：单档可視化
 └── out/                    submission.csv · results.json · packings.npz · audit.json
