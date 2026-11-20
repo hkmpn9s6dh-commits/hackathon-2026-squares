@@ -1,0 +1,5 @@
+out/_record_table.html
+out/_record_parsed.json
+out/solve.log
+__pycache__/
+*.pyc

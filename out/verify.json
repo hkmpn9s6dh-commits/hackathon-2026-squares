@@ -1,0 +1,62 @@
+[
+ {
+  "name": "AC-01 the file is the Kaggle format and nothing else",
+  "ok": true,
+  "detail": "header=['id', 'n', 'square_id', 'x', 'y', 'angle'] rows=500500 ids 0..500499 consecutive=True"
+ },
+ {
+  "name": "AC-02 every puzzle has exactly n squares, square_id 0..n-1",
+  "ok": true,
+  "detail": "puzzles=1000 bad=[]"
+ },
+ {
+  "name": "AC-03 coordinates are finite decimal literals",
+  "ok": true,
+  "detail": "rows=500500 malformed=0"
+ },
+ {
+  "name": "AC-04 no two squares in a puzzle overlap (SAT, all pairs)",
+  "ok": true,
+  "detail": "puzzles=1000 worst gap=-7.097e-13 at n=5"
+ },
+ {
+  "name": "AC-05 L is recomputed from the CSV, not trusted",
+  "ok": true,
+  "detail": "max |L_csv - L_results| = 5.02e-13"
+ },
+ {
+  "name": "AC-06 the total score is the sum of the per-puzzle scores",
+  "ok": true,
+  "detail": "recomputed 28.897421 vs results 28.897421"
+ },
+ {
+  "name": "AC-07 the grid baseline is what the metric says it is",
+  "ok": true,
+  "detail": "grid total 28.937669917 expected 28.937669917"
+ },
+ {
+  "name": "AC-08 no puzzle is worse than the grid",
+  "ok": true,
+  "detail": "worse_than_grid=0 better_than_grid=1"
+ },
+ {
+  "name": "AC-09 the shipped packings reproduce every reported side",
+  "ok": true,
+  "detail": "max deviation 0.00e+00 over 1000 puzzles"
+ },
+ {
+  "name": "AC-10 every number quoted in REPORT.md exists in results.json",
+  "ok": true,
+  "detail": "checked 3 claims, missing=[]"
+ },
+ {
+  "name": "AC-11 the site is one self-contained file",
+  "ok": true,
+  "detail": "external_refs=0 bytes=75376"
+ },
+ {
+  "name": "AC-12 the README commands name files that exist",
+  "ok": true,
+  "detail": "6 commands, missing=[]"
+ }
+]
